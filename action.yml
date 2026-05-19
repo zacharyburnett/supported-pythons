@@ -1,0 +1,34 @@
+name: supported-pythons
+description: "Retrieve active (not end-of-life) minor versions of Python supported by a Python package"
+branding:
+  icon: more-vertical
+  color: green
+
+inputs:
+  package:
+    description: path to Python package source containing `pyproject.toml`, from which to retrieve `requires-python`
+    required: false
+    default: ""
+  no-eoas:
+    description: also prune end-of-active-support versions of Python
+    required: false
+    default: ""
+  latest-only:
+    description: only return the latest supported minor version of Python
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3
+    - id: supported-pythons
+      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package=${{ inputs.package }} ${{ inputs.no-eoas && '--no-eoas' || '' }} ${{ inputs.latest-only && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
+      shell: bash
+
+outputs:
+  versions:
+    description: "Python minor versions"
+    value: ${{ steps.supported-pythons.outputs.versions }}
