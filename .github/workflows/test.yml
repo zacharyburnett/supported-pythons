@@ -32,3 +32,13 @@ jobs:
         with:
           package: ${{ matrix.repository }}
       - run: echo ${{ steps.supported-pythons.outputs.versions }}
+  test-workflow:
+    strategy:
+      matrix:
+        repository:
+          - spacetelescope/romancal
+          - psf/requests
+      fail-fast: false
+    uses: ./.github/workflows/supported-pythons.yml
+    with:
+      package: ${{ matrix.repository }}

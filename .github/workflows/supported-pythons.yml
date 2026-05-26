@@ -1,0 +1,49 @@
+name: supported Python versions
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: repository containing package source (defaults to that of calling workflow)
+        type: string
+        required: false
+        default: ""
+      package-ref:
+        description: branch or tag of package source (defaults to that of calling workflow)
+        type: string
+        required: false
+        default: ""
+      no-eoas:
+        description: also prune end-of-active-support versions of Python
+        type: boolean
+        required: false
+        default: false
+      latest-only:
+        description: only return the latest supported minor version of Python
+        type: boolean
+        required: false
+        default: false
+    outputs:
+      versions:
+        description: "Python minor versions"
+        value: ${{ jobs.supported-pythons.outputs.versions }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  supported-pythons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: retrieve package source code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ inputs.package || github.repository }}
+          ref: ${{ inputs.package-ref || github.ref }}
+      - id: supported_pythons
+        uses: zacharyburnett/supported-pythons@1.0.0
+        with:
+          package: .
+    outputs:
+      versions: ${{ steps.supported_pythons.outputs.versions }}
