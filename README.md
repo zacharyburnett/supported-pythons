@@ -17,8 +17,5 @@ retrieve active (not end-of-life) minor versions of Python supported by a Python
   with:
     package: spacetelescope/romancal
 - run: echo ${{ steps.supported-pythons.outputs.versions }}
-```
-
-```json
-["3.11", "3.12", "3.13", "3.14"]
+  # ["3.11", "3.12", "3.13", "3.14"]
 ```
