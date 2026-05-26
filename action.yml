@@ -16,11 +16,11 @@ inputs:
   no-eoas:
     description: also omit end-of-active-support versions of Python
     required: false
-    default: ""
+    default: "false"
   latest-only:
     description: only return the latest supported minor version of Python
     required: false
-    default: ""
+    default: "false"
 
 runs:
   using: composite
@@ -32,7 +32,7 @@ runs:
       with:
         python-version: 3
     - id: supported-pythons
-      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas && '--no-eoas' || '' }} ${{ inputs.latest-only && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
+      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas != 'false' && '--no-eoas' || '' }} ${{ inputs.latest-only != 'false' && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
       shell: bash
 
 outputs:
