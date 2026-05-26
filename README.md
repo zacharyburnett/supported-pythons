@@ -7,7 +7,7 @@ retrieve active (not end-of-life) minor versions of Python supported by a Python
 | input         | description                                                                                         |
 | ------------- | --------------------------------------------------------------------------------------------------- |
 | `package`     | path to Python package source containing `pyproject.toml`, from which to retrieve `requires-python` |
-| `no-eoas`     | also prune end-of-active-support versions of Python                                                 |
+| `no-eoas`     | omit end-of-active-support versions of Python                                                       |
 | `latest-only` | only return the latest supported minor version of Python                                            |
 
 ```yaml

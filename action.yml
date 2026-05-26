@@ -10,7 +10,7 @@ inputs:
     required: false
     default: ""
   no-eoas:
-    description: also prune end-of-active-support versions of Python
+    description: omit end-of-active-support versions of Python
     required: false
     default: ""
   latest-only:
