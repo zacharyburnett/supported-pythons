@@ -4,20 +4,18 @@
 
 retrieve active (not end-of-life) minor versions of Python supported by a Python package
 
-| input         | description                                                                                         |
-| ------------- | --------------------------------------------------------------------------------------------------- |
-| `package`     | path to Python package source containing `pyproject.toml`, from which to retrieve `requires-python` |
-| `no-eoas`     | omit end-of-active-support versions of Python                                                       |
-| `latest-only` | only return the latest supported minor version of Python                                            |
+| input         | description                                              |
+| ------------- | -------------------------------------------------------- |
+| `package`     | package source repository containing `pyproject.toml`    |
+| `package-ref` | branch / tag of package                                  |
+| `no-eoas`     | also omit end-of-active-support versions of Python       |
+| `latest-only` | only return the latest supported minor version of Python |
 
 ```yaml
-- uses: actions/checkout@v6
-  with:
-    repository: spacetelescope/romancal
 - id: supported-pythons
-  uses: zacharyburnett/supported-pythons@v1.0.0
+  uses: zacharyburnett/supported-pythons@v1.1.0
   with:
-    package: .
+    package: spacetelescope/romancal
 - run: echo ${{ steps.supported-pythons.outputs.versions }}
 ```
 

@@ -6,11 +6,15 @@ branding:
 
 inputs:
   package:
-    description: path to Python package source containing `pyproject.toml`, from which to retrieve `requires-python`
+    description: package source repository containing `pyproject.toml`
+    required: false
+    default: ""
+  package-ref:
+    description: branch / tag of package
     required: false
     default: ""
   no-eoas:
-    description: omit end-of-active-support versions of Python
+    description: also omit end-of-active-support versions of Python
     required: false
     default: ""
   latest-only:
@@ -21,11 +25,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - if: inputs.package != ''
+      run: git clone https://github.com/${{ inputs.package }} ${{ inputs.package_ref && format('--revision={0}', inputs.package_ref) || '' }} ./package/
+      shell: bash
     - uses: actions/setup-python@v5
       with:
         python-version: 3
     - id: supported-pythons
-      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package=${{ inputs.package }} ${{ inputs.no-eoas && '--no-eoas' || '' }} ${{ inputs.latest-only && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
+      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas && '--no-eoas' || '' }} ${{ inputs.latest-only && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
       shell: bash
 
 outputs:
