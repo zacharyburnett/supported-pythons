@@ -19,13 +19,13 @@ from packaging.version import Version
 
 @click.command()
 @click.option(
-    "--package",
-    help="path to Python package source containing `pyproject.toml`, from which to retrieve `requires-python`",
+    "--package-source",
+    help="path to Python package source containing `pyproject.toml`",
     default=None,
 )
 @click.option(
     "--no-eoas",
-    help="also prune end-of-active-support versions of Python",
+    help="also omit end-of-active-support versions of Python",
     is_flag=True,
     default=False,
 )
@@ -36,18 +36,18 @@ from packaging.version import Version
     default=False,
 )
 def supported_pythons(
-    package: Path = None,
+    package_source: Path = None,
     no_eoas: bool = False,
     latest_only: bool = False,
 ) -> list[Version]:
     current_python_versions = current_pythons(no_eoas=no_eoas)
 
-    if not package:
+    if not package_source:
         supported_versions = current_python_versions
     else:
         try:
-            if Path(package).exists():
-                pyproject_toml_filename = Path(package) / "pyproject.toml"
+            if Path(package_source).exists():
+                pyproject_toml_filename = Path(package_source) / "pyproject.toml"
                 if pyproject_toml_filename.exists():
                     with open(pyproject_toml_filename, "rb") as pyproject_toml_file:
                         pyproject_toml = tomli.load(pyproject_toml_file)
@@ -71,7 +71,7 @@ def supported_pythons(
                     )
             else:
                 raise FileNotFoundError(
-                    f'package not found at "{package}"; retrieving metadata from non-local packages is not yet implemented (checkout the package source first)'
+                    f'package not found at "{package_source}"; retrieving metadata from non-local packages is not yet implemented (checkout the package source first)'
                 )
 
             supported_versions = [

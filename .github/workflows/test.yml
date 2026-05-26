@@ -1,5 +1,7 @@
 name: test
 
+permissions: {}
+
 on:
   pull_request:
   push:
@@ -20,15 +22,19 @@ jobs:
           - psf/requests
       fail-fast: false
     steps:
-      - name: checkout action
-        uses: actions/checkout@v6
-      - name: checkout package source
-        uses: actions/checkout@v6
-        with:
-          repository: ${{ matrix.repository }}
-          path: ${{ matrix.repository }}
+      - uses: actions/checkout@v6
       - id: supported-pythons
         uses: ./
         with:
           package: ${{ matrix.repository }}
       - run: echo ${{ steps.supported-pythons.outputs.versions }}
+  test-workflow:
+    strategy:
+      matrix:
+        repository:
+          - spacetelescope/romancal
+          - psf/requests
+      fail-fast: false
+    uses: ./.github/workflows/supported-pythons.yml
+    with:
+      package: ${{ matrix.repository }}

@@ -28,22 +28,19 @@ on:
         description: "Python minor versions"
         value: ${{ jobs.supported-pythons.outputs.versions }}
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+permissions: {}
 
 jobs:
   supported-pythons:
     runs-on: ubuntu-latest
     steps:
-      - name: retrieve package source code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@v6
+      - id: supported-pythons
+        uses: ./
         with:
-          repository: ${{ inputs.package }}
-          ref: ${{ inputs.package-ref }}
-      - id: supported_pythons
-        uses: zacharyburnett/supported-pythons@1.0.0
-        with:
-          package: .
+          package: ${{ inputs.package }}
+          package-ref: ${{ inputs.package-ref }}
+          no-eoas: ${{ inputs.no-eoas }}
+          latest-only: ${{ inputs.latest-only }}
     outputs:
-      versions: ${{ steps.supported_pythons.outputs.versions }}
+      versions: ${{ steps.supported-pythons.outputs.versions }}
