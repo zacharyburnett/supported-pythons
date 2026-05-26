@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: supported-pythons
-        uses: zacharyburnett/supported-pythons@2.0.0
+        uses: zacharyburnett/supported-pythons@2.0.1
         with:
           package: spacetelescope/romancal
     outputs:
       versions: ${{ steps.supported-pythons.outputs.versions }}
-  test:
+  test_all_versions:
     needs: supported-pythons
     runs-on: ubuntu-latest
     strategy:
@@ -37,6 +37,39 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v6
+      - run: pip install . pytest
+      - run: pytest
+```
+
+```yaml
+jobs:
+  test_only_oldest:
+    runs-on: ubuntu-latest
+    steps:
+      - id: supported-pythons
+        uses: zacharyburnett/supported-pythons@2.0.1
+        with:
+          package: spacetelescope/romancal
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ steps.supported-pythons.outputs.oldest }}
+      - uses: actions/checkout@v6
+      - run: pip install . pytest
+      - run: pytest
+```
+```yaml
+jobs:
+  test_only_latest:
+    runs-on: ubuntu-latest
+    steps:
+      - id: supported-pythons
+        uses: zacharyburnett/supported-pythons@2.0.1
+        with:
+          package: spacetelescope/romancal
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ steps.supported-pythons.outputs.latest }}
       - uses: actions/checkout@v6
       - run: pip install . pytest
       - run: pytest
