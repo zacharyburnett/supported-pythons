@@ -17,10 +17,6 @@ inputs:
     description: also omit end-of-active-support versions of Python
     required: false
     default: "false"
-  latest-only:
-    description: only return the latest supported minor version of Python
-    required: false
-    default: "false"
 
 runs:
   using: composite
@@ -31,11 +27,23 @@ runs:
     - uses: actions/setup-python@v5
       with:
         python-version: 3
-    - id: supported-pythons
-      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas == 'true' && '--no-eoas' || '' }} ${{ inputs.latest-only == 'true' && '--latest-only' || '' }}) >> $GITHUB_OUTPUT
+    - id: versions
+      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas == 'true' && '--no-eoas' || '' }}) >> $GITHUB_OUTPUT
+      shell: bash
+    - id: oldest
+      run: echo version=$(python -c "print(${{ steps.versions.outputs.versions }}[0])") >> $GITHUB_OUTPUT
+      shell: bash
+    - id: latest
+      run: echo version=$(python -c "print(${{ steps.versions.outputs.versions }}[-1])") >> $GITHUB_OUTPUT
       shell: bash
 
 outputs:
   versions:
-    description: "Python minor versions"
-    value: ${{ steps.supported-pythons.outputs.versions }}
+    description: "Python minor versions as a JSON list"
+    value: ${{ steps.versions.outputs.versions }}
+  oldest:
+    description: "oldest supported Python minor version"
+    value: ${{ steps.oldest.outputs.version }}
+  latest:
+    description: "latest supported Python minor version"
+    value: ${{ steps.latest.outputs.version }}

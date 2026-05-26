@@ -28,6 +28,8 @@ jobs:
         with:
           package: ${{ matrix.repository }}
       - run: echo ${{ steps.supported-pythons.outputs.versions }}
+      - run: echo ${{ steps.supported-pythons.outputs.oldest }}
+      - run: echo ${{ steps.supported-pythons.outputs.latest }}
   test-workflow:
     strategy:
       matrix:

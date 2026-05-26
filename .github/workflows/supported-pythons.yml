@@ -18,15 +18,16 @@ on:
         type: boolean
         required: false
         default: false
-      latest-only:
-        description: only return the latest supported minor version of Python
-        type: boolean
-        required: false
-        default: false
     outputs:
       versions:
-        description: "Python minor versions"
+        description: "Python minor versions as a JSON list"
         value: ${{ jobs.supported-pythons.outputs.versions }}
+      oldest:
+        description: "oldest supported Python minor version"
+        value: ${{ jobs.supported-pythons.outputs.oldest }}
+      latest:
+        description: "latest supported Python minor version"
+        value: ${{ jobs.supported-pythons.outputs.latest }}
 
 permissions: {}
 
@@ -44,6 +45,7 @@ jobs:
           package: ${{ inputs.package }}
           package-ref: ${{ inputs.package-ref }}
           no-eoas: ${{ inputs.no-eoas }}
-          latest-only: ${{ inputs.latest-only }}
     outputs:
       versions: ${{ steps.supported-pythons.outputs.versions }}
+      oldest: ${{ steps.supported-pythons.outputs.oldest }}
+      latest: ${{ steps.supported-pythons.outputs.latest }}

@@ -4,12 +4,17 @@
 
 retrieve active (not end-of-life) minor versions of Python supported by a Python package
 
-| input         | description                                              |
-| ------------- | -------------------------------------------------------- |
-| `package`     | package source repository containing `pyproject.toml`    |
-| `package-ref` | branch or tag of package source                          |
-| `no-eoas`     | also omit end-of-active-support versions of Python       |
-| `latest-only` | only return the latest supported minor version of Python |
+| input         | description                                           |
+| ------------- | ----------------------------------------------------- |
+| `package`     | package source repository containing `pyproject.toml` |
+| `package-ref` | branch or tag of package source                       |
+| `no-eoas`     | also omit end-of-active-support versions of Python    |
+
+| output     | description                           |
+| ---------- | ------------------------------------- |
+| `versions` | Python minor versions as a JSON list  |
+| `oldest`   | oldest supported Python minor version |
+| `latest`   | latest supported Python minor version |
 
 ```yaml
 jobs:
@@ -20,7 +25,6 @@ jobs:
         uses: zacharyburnett/supported-pythons@v1.0.0
         with:
           package: spacetelescope/romancal
-        # this step has an output of versions=["3.11", "3.12", "3.13", "3.14"]
     outputs:
       versions: ${{ steps.supported-pythons.outputs.versions }}
   test:

@@ -29,17 +29,10 @@ from packaging.version import Version
     is_flag=True,
     default=False,
 )
-@click.option(
-    "--latest-only",
-    help="only return the latest supported minor version of Python",
-    is_flag=True,
-    default=False,
-)
 def supported_pythons(
     package_source: Path = None,
     no_eoas: bool = False,
-    latest_only: bool = False,
-) -> list[Version]:
+) -> list[str]:
     current_python_versions = current_pythons(no_eoas=no_eoas)
 
     if not package_source:
@@ -85,8 +78,6 @@ def supported_pythons(
             supported_versions = current_python_versions
 
     supported_versions = list(reversed(supported_versions))
-    if latest_only:
-        supported_versions = [supported_versions[-1]]
 
     print("[" + ", ".join([f'"{version}"' for version in supported_versions]) + "]")
     return supported_versions
