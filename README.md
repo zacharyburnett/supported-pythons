@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: supported-pythons
-        uses: zacharyburnett/supported-pythons@v1.0.0
+        uses: zacharyburnett/supported-pythons@2.0.0
         with:
           package: spacetelescope/romancal
     outputs:
