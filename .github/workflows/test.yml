@@ -22,14 +22,13 @@ jobs:
           - psf/requests
       fail-fast: false
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - id: supported-pythons
         uses: ./
         with:
           package: ${{ matrix.repository }}
-      - run: echo ${{ steps.supported-pythons.outputs.versions }}
-      - run: echo ${{ steps.supported-pythons.outputs.oldest }}
-      - run: echo ${{ steps.supported-pythons.outputs.latest }}
   test-workflow:
     strategy:
       matrix:

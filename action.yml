@@ -21,12 +21,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      with:
+        python-version: 3
     - if: inputs.package != ''
       run: git clone https://github.com/${{ inputs.package }} ${{ inputs.package_ref && format('--revision={0}', inputs.package_ref) || '' }} ./package/
       shell: bash
-    - uses: actions/setup-python@v5
-      with:
-        python-version: 3
     - id: versions
       run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas == 'true' && '--no-eoas' || '' }}) >> $GITHUB_OUTPUT
       shell: bash
