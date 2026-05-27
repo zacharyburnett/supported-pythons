@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: supported-pythons
-        uses: zacharyburnett/supported-pythons@2.0.1
+        uses: zacharyburnett/supported-pythons@2.0.2
         with:
           package: spacetelescope/romancal
     outputs:
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: supported-pythons
-        uses: zacharyburnett/supported-pythons@2.0.1
+        uses: zacharyburnett/supported-pythons@2.0.2
         with:
           package: spacetelescope/romancal
       - uses: actions/setup-python@v6
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: supported-pythons
-        uses: zacharyburnett/supported-pythons@2.0.1
+        uses: zacharyburnett/supported-pythons@2.0.2
         with:
           package: spacetelescope/romancal
       - uses: actions/setup-python@v6
