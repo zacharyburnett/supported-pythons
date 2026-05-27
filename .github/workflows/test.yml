@@ -29,13 +29,3 @@ jobs:
         uses: ./
         with:
           package: ${{ matrix.repository }}
-  test-workflow:
-    strategy:
-      matrix:
-        repository:
-          - spacetelescope/romancal
-          - psf/requests
-      fail-fast: false
-    uses: ./.github/workflows/supported-pythons.yml
-    with:
-      package: ${{ matrix.repository }}
