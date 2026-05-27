@@ -24,11 +24,10 @@ runs:
     - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
       with:
         python-version: 3
-    - if: inputs.package != ''
-      run: git clone https://github.com/${{ inputs.package }} ${{ inputs.package_ref && format('--revision={0}', inputs.package_ref) || '' }} ./package/
+    - run: git clone https://github.com/${{ inputs.package || github.workflow_repository }} ${{ (inputs.package-ref != '' || inputs.package == '') && format('--revision={0}', inputs.package != '' && inputs.package-ref || github.workflow_sha) || '' }} ../package/
       shell: bash
     - id: versions
-      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=${{ inputs.package && './package/' || '.' }} ${{ inputs.no-eoas == 'true' && '--no-eoas' || '' }}) >> $GITHUB_OUTPUT
+      run: echo versions=$(pipx run ${{ github.action_path }}/supported_pythons.py --package-source=../package/ ${{ inputs.no-eoas == 'true' && '--no-eoas' || '' }}) >> $GITHUB_OUTPUT
       shell: bash
     - id: oldest
       run: echo version=$(python -c "print(${{ steps.versions.outputs.versions }}[0])") >> $GITHUB_OUTPUT
